@@ -1,23 +1,28 @@
 const Participants = ({ status, userName }) => {
-  const statusMap = {
-    waiting: { text: 'Waiting for others to join...', color: '#f59e0b' },
-    connecting: { text: 'Connecting...', color: '#3b82f6' },
-    connected: { text: 'Connected', color: '#10b981' },
-    left: { text: 'Participant left', color: '#ef4444' },
+  const statusText = {
+    idle: 'Setting up...',
+    waiting: 'Waiting for participant to join...',
+    connecting: 'Connecting...',
+    connected: 'Connected',
+    left: 'Participant left the meeting',
   };
-
-  const current = statusMap[status] || statusMap.waiting;
 
   return (
     <div className="participants-panel">
       <h3>Meeting Info</h3>
+      <div className={`status-badge status-${status}`}>
+        {statusText[status] || 'Unknown'}
+      </div>
       <div className="participant-item">
-        <span className="participant-dot" style={{ background: '#10b981' }}></span>
+        <span className="participant-dot"></span>
         <span>{userName} (You)</span>
       </div>
-      <div className="connection-status" style={{ color: current.color }}>
-        ● {current.text}
-      </div>
+      {status === 'connected' && (
+        <div className="participant-item">
+          <span className="participant-dot"></span>
+          <span>Remote Participant</span>
+        </div>
+      )}
     </div>
   );
 };

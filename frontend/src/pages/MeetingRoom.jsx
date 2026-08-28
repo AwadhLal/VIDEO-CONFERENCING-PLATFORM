@@ -1,78 +1,57 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import useWebRTC from '../hooks/useWebRTC';
 import VideoCall from '../components/VideoCall';
-import VideoControls from '../components/VideoControls';
-import Participants from '../components/Participants';
 import api from '../services/api';
 
 const MeetingRoom = () => {
   const { roomId } = useParams();
-  const { user } = useAuth();
   const navigate = useNavigate();
   const [meeting, setMeeting] = useState(null);
-  const [meetingError, setMeetingError] = useState('');
-
-  const {
-    localVideoRef,
-    remoteVideoRef,
-    status,
-    isMuted,
-    isCameraOff,
-    toggleMute,
-    toggleCamera,
-    stopMedia,
-  } = useWebRTC(roomId);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.get(`/meetings/${roomId}`)
-      .then(({ data }) => setMeeting(data))
-      .catch(() => setMeetingError('Meeting not found'));
+    const fetchMeeting = async () => {
+      try {
+        const { data } = await api.get(`/meetings/${roomId}`);
+        setMeeting(data);
+      } catch (err) {
+        if (err.response?.status === 404) {
+          setError('Meeting room not found.');
+        } else {
+          setError('Failed to load meeting.');
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMeeting();
   }, [roomId]);
 
-  const handleLeave = () => {
-    stopMedia();
-    navigate('/dashboard');
-  };
-
-  if (meetingError) {
+  if (loading) {
     return (
-      <div className="meeting-error">
-        <h2>⚠️ {meetingError}</h2>
-        <button onClick={() => navigate('/dashboard')} className="btn btn-primary">
-          Back to Dashboard
-        </button>
+      <div className="page centered">
+        <div className="spinner"></div>
+        <p>Loading meeting room...</p>
       </div>
     );
   }
 
-  return (
-    <div className="meeting-room">
-      <div className="meeting-top-bar">
-        <div>
-          <h2 className="meeting-title">{meeting?.title || 'Loading...'}</h2>
-          <span className="meeting-room-id">Room: {roomId}</span>
+  if (error) {
+    return (
+      <div className="page centered">
+        <div className="empty-state">
+          <span>❌</span>
+          <p>{error}</p>
+          <button className="btn btn-primary" onClick={() => navigate('/dashboard')}>
+            Back to Dashboard
+          </button>
         </div>
-        <Participants status={status} userName={user?.name} />
       </div>
+    );
+  }
 
-      <VideoCall
-        localVideoRef={localVideoRef}
-        remoteVideoRef={remoteVideoRef}
-        status={status}
-        isCameraOff={isCameraOff}
-      />
-
-      <VideoControls
-        isMuted={isMuted}
-        isCameraOff={isCameraOff}
-        onToggleMute={toggleMute}
-        onToggleCamera={toggleCamera}
-        onLeave={handleLeave}
-      />
-    </div>
-  );
+  return <VideoCall roomId={roomId} meetingTitle={meeting?.title} />;
 };
 
 export default MeetingRoom;

@@ -9,23 +9,30 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.get('/meetings')
-      .then(({ data }) => setMeetings(data))
-      .catch(console.error)
-      .finally(() => setLoading(false));
+    const fetchMeetings = async () => {
+      try {
+        const { data } = await api.get('/meetings');
+        setMeetings(data);
+      } catch (err) {
+        console.error('Failed to fetch meetings:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMeetings();
   }, []);
 
-  const copyLink = (roomId) => {
-    navigator.clipboard.writeText(`${window.location.origin}/meeting/${roomId}`);
-    alert('Meeting link copied!');
+  const copyRoomId = (roomId) => {
+    navigator.clipboard.writeText(roomId);
+    alert(`Room ID "${roomId}" copied to clipboard!`);
   };
 
   return (
-    <div className="dashboard-page">
+    <div className="page dashboard-page">
       <div className="dashboard-header">
         <div>
           <h1>Welcome, {user?.name} 👋</h1>
-          <p>Manage your meetings from here.</p>
+          <p className="text-muted">Manage your meetings below</p>
         </div>
         <div className="dashboard-actions">
           <Link to="/create-meeting" className="btn btn-primary">+ New Meeting</Link>
@@ -36,30 +43,33 @@ const Dashboard = () => {
       <div className="meetings-section">
         <h2>Your Meetings</h2>
         {loading ? (
-          <p className="loading-text">Loading meetings...</p>
+          <div className="loading">Loading meetings...</div>
         ) : meetings.length === 0 ? (
           <div className="empty-state">
             <span>📅</span>
-            <p>No meetings yet. Create one to get started.</p>
+            <p>No meetings yet. Create your first one!</p>
             <Link to="/create-meeting" className="btn btn-primary">Create Meeting</Link>
           </div>
         ) : (
           <div className="meetings-grid">
-            {meetings.map((m) => (
-              <div key={m._id} className="meeting-card">
+            {meetings.map((meeting) => (
+              <div key={meeting._id} className="meeting-card">
                 <div className="meeting-card-header">
-                  <h3>{m.title}</h3>
-                  <span className="meeting-id">ID: {m.roomId}</span>
+                  <h3>{meeting.title}</h3>
+                  <span className="room-id-badge">{meeting.roomId}</span>
                 </div>
-                <p className="meeting-date">
-                  {new Date(m.createdAt).toLocaleDateString('en-US', {
-                    year: 'numeric', month: 'short', day: 'numeric',
-                  })}
+                <p className="text-muted">
+                  Created {new Date(meeting.createdAt).toLocaleDateString()}
                 </p>
                 <div className="meeting-card-actions">
-                  <Link to={`/meeting/${m.roomId}`} className="btn btn-primary btn-sm">Join</Link>
-                  <button onClick={() => copyLink(m.roomId)} className="btn btn-outline btn-sm">
-                    Copy Link
+                  <Link to={`/meeting/${meeting.roomId}`} className="btn btn-primary btn-sm">
+                    Join
+                  </Link>
+                  <button
+                    className="btn btn-outline btn-sm"
+                    onClick={() => copyRoomId(meeting.roomId)}
+                  >
+                    Copy ID
                   </button>
                 </div>
               </div>

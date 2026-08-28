@@ -11,8 +11,7 @@ const CreateMeeting = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    if (!title.trim()) return setError('Please enter a meeting title');
-
+    if (!title.trim()) return setError('Meeting title is required');
     setLoading(true);
     try {
       const { data } = await api.post('/meetings', { title });
@@ -28,10 +27,8 @@ const CreateMeeting = () => {
     <div className="auth-page">
       <div className="auth-card">
         <h2>Create a Meeting</h2>
-        <p className="auth-subtitle">Start a new video conference room</p>
-
+        <p className="auth-subtitle">A unique Room ID will be generated for you</p>
         {error && <div className="alert alert-error">{error}</div>}
-
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
             <label>Meeting Title</label>
@@ -39,12 +36,12 @@ const CreateMeeting = () => {
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="e.g. Team Standup"
+              placeholder="e.g. Team Standup, Interview..."
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
-            {loading ? 'Creating...' : 'Create & Join Room'}
+          <button type="submit" className="btn btn-primary btn-full" disabled={loading}>
+            {loading ? 'Creating...' : 'Create & Join Meeting'}
           </button>
         </form>
       </div>

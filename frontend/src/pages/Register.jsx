@@ -14,14 +14,12 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-
     if (!form.name || !form.email || !form.password) {
       return setError('Please fill in all fields');
     }
     if (form.password.length < 6) {
       return setError('Password must be at least 6 characters');
     }
-
     setLoading(true);
     try {
       await register(form.name, form.email, form.password);
@@ -36,14 +34,12 @@ const Register = () => {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <h2>Create account</h2>
-        <p className="auth-subtitle">Join VideoConf for free</p>
-
+        <h2>Create an account</h2>
+        <p className="auth-subtitle">Join VideoMeet today</p>
         {error && <div className="alert alert-error">{error}</div>}
-
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
-            <label>Name</label>
+            <label>Full Name</label>
             <input
               type="text"
               name="name"
@@ -71,16 +67,15 @@ const Register = () => {
               name="password"
               value={form.password}
               onChange={handleChange}
-              placeholder="Min. 6 characters"
+              placeholder="Min 6 characters"
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
+          <button type="submit" className="btn btn-primary btn-full" disabled={loading}>
             {loading ? 'Creating account...' : 'Create Account'}
           </button>
         </form>
-
-        <p className="auth-switch">
+        <p className="auth-footer">
           Already have an account? <Link to="/login">Sign in</Link>
         </p>
       </div>

@@ -1,10 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 
-const VideoControls = ({ isMuted, isCameraOff, onToggleMute, onToggleCamera, onLeave }) => {
+const VideoControls = ({ isMuted, isCameraOff, onToggleMute, onToggleCamera }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="video-controls">
       <button
-        className={`ctrl-btn ${isMuted ? 'ctrl-btn-off' : ''}`}
+        className={`control-btn ${isMuted ? 'control-btn-off' : ''}`}
         onClick={onToggleMute}
         title={isMuted ? 'Unmute' : 'Mute'}
       >
@@ -13,16 +15,21 @@ const VideoControls = ({ isMuted, isCameraOff, onToggleMute, onToggleCamera, onL
       </button>
 
       <button
-        className={`ctrl-btn ${isCameraOff ? 'ctrl-btn-off' : ''}`}
+        className={`control-btn ${isCameraOff ? 'control-btn-off' : ''}`}
         onClick={onToggleCamera}
-        title={isCameraOff ? 'Turn camera on' : 'Turn camera off'}
+        title={isCameraOff ? 'Turn on camera' : 'Turn off camera'}
       >
         {isCameraOff ? '📷' : '📹'}
         <span>{isCameraOff ? 'Start Video' : 'Stop Video'}</span>
       </button>
 
-      <button className="ctrl-btn ctrl-btn-leave" onClick={onLeave} title="Leave meeting">
-        📞 <span>Leave</span>
+      <button
+        className="control-btn control-btn-leave"
+        onClick={() => navigate('/dashboard')}
+        title="Leave meeting"
+      >
+        📞
+        <span>Leave</span>
       </button>
     </div>
   );

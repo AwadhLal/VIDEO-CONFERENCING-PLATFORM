@@ -13,12 +13,12 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <Link to="/" className="navbar-brand">
-        📹 VideoConf
+        🎥 VideoMeet
       </Link>
       <div className="navbar-links">
         {user ? (
           <>
-            <span className="navbar-user">👤 {user.name}</span>
+            <span className="navbar-user">Hi, {user.name}</span>
             <Link to="/dashboard" className="btn btn-outline">Dashboard</Link>
             <button onClick={handleLogout} className="btn btn-danger">Logout</button>
           </>

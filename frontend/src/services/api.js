@@ -6,14 +6,14 @@ const api = axios.create({
 
 // Attach JWT token to every request
 api.interceptors.request.use((config) => {
-  const user = JSON.parse(localStorage.getItem('user') || 'null');
+  const user = JSON.parse(localStorage.getItem('user'));
   if (user?.token) {
     config.headers.Authorization = `Bearer ${user.token}`;
   }
   return config;
 });
 
-// Handle 401 responses
+// Handle 401 - clear storage and redirect to login
 api.interceptors.response.use(
   (response) => response,
   (error) => {

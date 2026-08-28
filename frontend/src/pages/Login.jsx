@@ -14,11 +14,9 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-
     if (!form.email || !form.password) {
       return setError('Please fill in all fields');
     }
-
     setLoading(true);
     try {
       await login(form.email, form.password);
@@ -35,9 +33,7 @@ const Login = () => {
       <div className="auth-card">
         <h2>Welcome back</h2>
         <p className="auth-subtitle">Sign in to your account</p>
-
         {error && <div className="alert alert-error">{error}</div>}
-
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
             <label>Email</label>
@@ -61,12 +57,11 @@ const Login = () => {
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
+          <button type="submit" className="btn btn-primary btn-full" disabled={loading}>
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
-
-        <p className="auth-switch">
+        <p className="auth-footer">
           Don't have an account? <Link to="/register">Register</Link>
         </p>
       </div>

@@ -8,12 +8,10 @@ const Home = () => {
     <div className="home-page">
       <div className="hero">
         <div className="hero-content">
-          <h1 className="hero-title">
-            Video Calls, <span className="highlight">Simplified</span>
-          </h1>
+          <h1>Video Meetings, <span className="highlight">Simplified</span></h1>
           <p className="hero-subtitle">
-            Connect with anyone, anywhere. Free, real-time video conferencing powered by WebRTC.
-            No downloads, no plugins — just open your browser and start a call.
+            Connect face-to-face with crystal-clear video and audio. No downloads required.
+            Powered by WebRTC for real peer-to-peer communication.
           </p>
           <div className="hero-actions">
             {user ? (
@@ -30,32 +28,28 @@ const Home = () => {
           </div>
         </div>
         <div className="hero-visual">
-          <div className="hero-card">
-            <div className="hero-video-mock">
-              <div className="mock-screen">📹</div>
-              <div className="mock-controls">
-                <span>🎤</span><span>📷</span><span>📞</span>
-              </div>
-            </div>
+          <div className="video-mockup">
+            <div className="mockup-screen">🎥</div>
+            <div className="mockup-pip">👤</div>
           </div>
         </div>
       </div>
 
       <div className="features">
         <div className="feature-card">
-          <span className="feature-icon">⚡</span>
-          <h3>Instant Meetings</h3>
-          <p>Create a room in seconds and share the link with anyone.</p>
+          <span className="feature-icon">🔒</span>
+          <h3>Secure</h3>
+          <p>End-to-end peer-to-peer WebRTC connections with JWT authentication.</p>
         </div>
         <div className="feature-card">
-          <span className="feature-icon">🔒</span>
-          <h3>Peer-to-Peer</h3>
-          <p>Video and audio travel directly between participants via WebRTC.</p>
+          <span className="feature-icon">⚡</span>
+          <h3>Real-time</h3>
+          <p>Instant signaling with Socket.IO for low-latency connections.</p>
         </div>
         <div className="feature-card">
           <span className="feature-icon">🌐</span>
-          <h3>No Downloads</h3>
-          <p>Works entirely in the browser. Nothing to install.</p>
+          <h3>No Plugins</h3>
+          <p>Works directly in modern browsers. No downloads or extensions needed.</p>
         </div>
       </div>
     </div>

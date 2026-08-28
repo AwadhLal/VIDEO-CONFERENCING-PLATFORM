@@ -11,18 +11,17 @@ const JoinMeeting = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    const id = roomId.trim();
-    if (!id) return setError('Please enter a Room ID');
-
+    const trimmed = roomId.trim();
+    if (!trimmed) return setError('Please enter a Room ID');
     setLoading(true);
     try {
-      await api.get(`/meetings/${id}`);
-      navigate(`/meeting/${id}`);
+      await api.get(`/meetings/${trimmed}`);
+      navigate(`/meeting/${trimmed}`);
     } catch (err) {
       if (err.response?.status === 404) {
-        setError('Meeting not found. Check the Room ID and try again.');
+        setError('Room not found. Please check the Room ID and try again.');
       } else {
-        setError('Failed to join meeting');
+        setError('Failed to join meeting. Please try again.');
       }
     } finally {
       setLoading(false);
@@ -33,10 +32,8 @@ const JoinMeeting = () => {
     <div className="auth-page">
       <div className="auth-card">
         <h2>Join a Meeting</h2>
-        <p className="auth-subtitle">Enter a Room ID to join an existing call</p>
-
+        <p className="auth-subtitle">Enter the Room ID shared by the host</p>
         {error && <div className="alert alert-error">{error}</div>}
-
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
             <label>Room ID</label>
@@ -44,11 +41,11 @@ const JoinMeeting = () => {
               type="text"
               value={roomId}
               onChange={(e) => setRoomId(e.target.value)}
-              placeholder="Paste the room ID here"
+              placeholder="e.g. a1b2c3d4"
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
+          <button type="submit" className="btn btn-primary btn-full" disabled={loading}>
             {loading ? 'Joining...' : 'Join Meeting'}
           </button>
         </form>
